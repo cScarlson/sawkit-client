@@ -68,18 +68,23 @@ OnReady returns `this` for the sake of method chaining - meaning, is is possible
           });
 
 ***.send()***
+
 `.send()`
 
 ***.sendBinary()***
+
 `.sendBinary()`
 
 ***.emit()***
+
 `.emit()`
 
 ***.on()***
+
 `.on()`
 
 ***.settings()***
+
 `.settings()` takes an Object-Literal with the following settings:
 1. binaryType - sets the WebSocket's binaryType property
 
@@ -87,9 +92,11 @@ Example:
         $ws('ws://localhost:8080').settings({binaryType: 'arraybuffer'});
 
 ***.get()***
+
 `.settings()` currently not implemented :-(
 
 **TODO**
+
 Make each MONAD (`$('url.com:8080')`) return a unique object from class so that connections can be made to multiple servers without errors.
 
  
