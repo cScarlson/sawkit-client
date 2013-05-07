@@ -1,15 +1,30 @@
-Function.prototype.method = function(name, fn){
+/**
+ * This WebSocket library allows one to emit and receive WebSocket events/messages.
+ * Unlike Socket.io and other libraries, sawKit-client (or rather "$ws-client")...
+ * ...allows for a JSON.parsable message-object to be sent without major coordination...
+ * ...between front and back-end libraries; this allows for the message to still be sent...
+ * ...by the client and received by server - it just requires that the server JSON.parses the...
+ * ...message to look for an "_event" property (which describes the event/emission from client)...
+ * ...and a "_data" property which contains the data sent from the client. Alternatively, use ...
+ * ...sawKit-node which already has the on-event-emit functionality already built in.
+ *
+ * IMPORTANT!: Pull-Requests will be ignored if it strays from the object's prototypal design.
+ *
+ */
+
+
+Function.prototype.method = function(name, fn){ // for().method().chaining()
   this.prototype[name] = fn;
   return this;
 };
-String.prototype.forEach = Array.prototype.forEach; // polyfill
-//new WebSocket((uri || 'ws://e.ws.ndn.ucla.edu:9696'));
+
+String.prototype.forEach = Array.prototype.forEach; // polyfill (forEach on chars)
 
 var $ws = window.$ws = (window.$ws || (function(){
   function WS(){
     var self = this;
     return function connect(uri){
-      self.ws = new WebSocket((uri || 'ws://e.ws.ndn.ucla.edu:9696'));
+      self.ws = new WebSocket((uri || 'localhost:9696' || 'ws://e.ws.ndn.ucla.edu:9696'));
       return {
         ws: self.ws,
         ready: self.connected,
@@ -112,7 +127,7 @@ var $ws = window.$ws = (window.$ws || (function(){
     };
     
     function sendBinary(binary, binaryType){
-      this.ws.binaryType = (binaryType && binaryType) || 'arraybuffer';
+      this.settings({binaryType: 'arraybuffer'});
       this.ws.send(binary);
     };
     
@@ -136,19 +151,19 @@ var $ws = window.$ws = (window.$ws || (function(){
     };
     
     function on(event, callback){
-      var promise, promises;
+      var promise, promises, cons = event.constructor;
       
-      (event.constructor === String && callback) && (function(){
+      (cons === String && callback) && (function(){
         promises = util.pro.mise({event: event, callback: callback});
       }())
       ||
-      (event.constructor === Object && !callback) && (function(){
+      (cons === Object && !callback) && (function(){
         promise = util.msgBridge({action: 'receive', data: event.data}).promise;
         (promise.callback) && promise.callback(promise.data, promise.raw, promise);
       }())
       ||
       (
-        (event.constructor === ArrayBuffer || event.constructor === Uint8Array)
+        (cons === ArrayBuffer || cons === Uint8Array)
         &&
         !callback
       ) && (function(){
@@ -160,8 +175,12 @@ var $ws = window.$ws = (window.$ws || (function(){
     };
     
     function settings(opts){
-      this.ws.binaryType = (opts.binaryType && opts.binaryType) || 'arraybuffer';
-      console.log('settings changed', opts, this.ws);
+      var changes = [];
+      for(opt in opts){
+        this.ws[opt] = opts[opt];
+        changes.push(opt);
+      }
+      console.log('settings changed for each of these:', changes, this.ws);
       return this;
     };
     
@@ -186,34 +205,6 @@ var $ws = window.$ws = (window.$ws || (function(){
   return new WS();
 })());
 
-//implementation
-function go(binaryInterest){
 
-  /*$ws('ws://localhost:8080').ready(function($ws, ws){
-  
-    $ws.settings({binaryType: 'arraybuffer'});
-    
-    $ws.send('tonight at 9...')
-      .send({msg: 'tonight at 9...'})
-      .emit('news', {message: 'WARNING! Flash-flood!'})
-      .emit('news', 'TORNADOW WARNING!');
-    
-    $ws.on('news', function(data){
-        console.log('NEWS!', data, typeof data);
-      }).on('message', function(data){
-        console.log('MESSAGE!', data, typeof data);
-      });
-    
-  }).settings({binaryType: 'blob'});*/
-  
-  $ws('ws://e.ws.ndn.ucla.edu:9696').ready(function($ws, ws){
-    var bytearray = new Uint8Array(binaryInterest.length);
-    bytearray.set(binaryInterest);
-    
-    $ws.on('message', function(data){
-      console.log('CCNd RESULT:', data);
-    });
-    $ws.sendBinary(bytearray.buffer);
-  });
-  
-};
+
+
