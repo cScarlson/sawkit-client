@@ -3,7 +3,7 @@ sawKit-client
 
 This WebSocket library allows one to emit and receive WebSocket events/messages.
 
-Unlike Socket.io and other libraries, sawKit-client (or rather "$ws-client") allows for a JSON.parsable message-object to be between front and back-end libraries; this allows for the message to still be sent by the client and received by server - it just requires that the server JSON.parses the message to look for an "_event" property (which describes the event/emission from client) and a "_data" property which contains the data sent from the client. Alternatively, use sawKit-node which already has the on-event-emit functionality already built in.
+Unlike Socket.io and other libraries, sawKit-client (or rather "$ws-client") allows for a JSON.parsable message-object to be universally compatible between front and back-end libraries; this allows for the message to still be sent by the client and received by server - it just requires that the server JSON.parses the message to look for an "_event" property (which describes the event/emission from client) and a "_data" property which contains the data sent from the client. A sister library, sawKit-node, already has the on-event-emit functionality already built in.
 
 **Quick-Start**
 
