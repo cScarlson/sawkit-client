@@ -41,9 +41,11 @@ Unlike Socket.io and other libraries, sawKit-client (or rather "$ws-client") all
 **METHODS**
 
 ***$ws()***
+
 `$ws` is a MONADic method which instatiates a `new` object for API use. 
 
 ***.ready()***
+
 `.ready`, or onReady chains to the end of the `$ws()` MONAD (not to be confused with the `$ws` NameSpace). The onReady event is just a wrapper around the HTML5 WebSocket-spec's onconnection event. It takes a callback as its only argument and passes in two arguments to the callbak when a connection to a backend source is successful:
 
         $ws('ws://localhost:8080').ready(function($ws, ws){
