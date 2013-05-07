@@ -88,8 +88,7 @@ OnReady returns `this` for the sake of method chaining - meaning, is is possible
 `.settings()` takes an Object-Literal with the following settings:
 1. binaryType - sets the WebSocket's binaryType property
 
-Example:
-        $ws('ws://localhost:8080').settings({binaryType: 'arraybuffer'});
+Example: `$ws('ws://localhost:8080').settings({binaryType: 'arraybuffer'});`
 
 ***.get()***
 
