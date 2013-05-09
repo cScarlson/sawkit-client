@@ -91,11 +91,6 @@ var $ws = window.$ws = (window.$ws || (function(){
             msg = ((msg._data) && msg._data) || msg;
           }());
           
-          (cons === ArrayBuffer && cons === Uint8Array && cons === Blob) && (function(){alert('binary!');
-            event = ((msg._event) && msg._event) || event;
-            msg = ((msg._data) && msg._data) || msg;
-          }());
-          
           util.pro.gress(event, function(_promise){
             _promise.data = msg, _promise.raw = raw, _promise.event = event; promise = _promise;
           });
